@@ -3,7 +3,7 @@
 # require 'pry-byebug'
 
 module UsefulMethods
-  def key_valid(key)
+  def key_valid?(key)
     pattern = /^[1-6]{4}$/
     pattern.match?(key)
   end
@@ -15,11 +15,9 @@ module UsefulMethods
   def winning_message(winner)
     puts "#{winner} broke the secret code"
   end
-
 end
 
 class Choice
-
   def codebreaker_or_codemaker
     puts 'Press 1 to be a codebreaker and 2 to be a codemaker!'
     input = gets.chomp
@@ -41,7 +39,6 @@ class Choice
       codebreaker_or_codemaker
     end
   end
-
 end
 
 class Codemaker
@@ -59,7 +56,7 @@ class Codemaker
     puts 'Enter valid secret key'
     input = gets.chomp
 
-    if key_valid(input)
+    if key_valid?(input)
       @secretkey = input
     else
       error_message
@@ -78,7 +75,7 @@ class Feedback
     pruned_secretkey_array = []
     pruned_triedkey_array = []
 
-    (0..3).each do |index|
+    4.times do |index|
       if secretkey_array[index] == triedkey_array[index]
         pegs.push('B')
       else
@@ -95,11 +92,10 @@ class Feedback
     end
     # display(pegs) unless pegs.join == 'BBBB'
     self.pegs = pegs
-
   end
 
   def display
-    pegs.each{|peg| print peg}
+    pegs.each { |peg| print peg }
     puts
   end
 end
@@ -110,22 +106,21 @@ class HumanCodebreaker
   def input_code
     puts 'Enter your code'
     input = gets.chomp
-    unless key_valid(input)
+    if key_valid?(input)
+      input
+    else
       puts 'Try again'
       input_code
-    else
-      input
     end
   end
 
   def play(secretkey)
-  
     (1..12).each do |index|
       puts "Attempt #{index}"
       triedkey = input_code
       feedback = Feedback.new
       if feedback.hint(secretkey, triedkey).join == 'BBBB'
-        winning_message("You")
+        winning_message('You')
         break
       end
       feedback.display
@@ -134,7 +129,6 @@ class HumanCodebreaker
     puts "The secret key was #{secretkey}"
   end
 end
-
 
 class MachineCodebreaker
   include UsefulMethods
@@ -154,7 +148,6 @@ class MachineCodebreaker
   end
 
   def eliminate_space_algorithm(secretkey)
-
     sample_space = generate_sample_space
     (1..12).each do |index|
       puts "Attempt #{index}"
@@ -164,24 +157,21 @@ class MachineCodebreaker
 
       print "#{triedkey}  #{triedkey_pegs}\n"
 
-      if(triedkey_pegs == 'BBBB')
+      if triedkey_pegs == 'BBBB'
         return true
       else
-        sample_space.reject! do |key|
+        sample_space.select! do |key|
           algorithm_feedback = Feedback.new
           algorithm_pegs = algorithm_feedback.hint(triedkey, key).join
-          triedkey_pegs != algorithm_pegs
+          triedkey_pegs == algorithm_pegs
         end
       end
     end
     puts "The secret key was #{secretkey}"
-
   end
 
   def play(secretkey)
-    if eliminate_space_algorithm(secretkey)
-      winning_message("Machine")
-    end
+    winning_message('Machine') if eliminate_space_algorithm(secretkey)
   end
 end
 
