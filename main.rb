@@ -108,7 +108,7 @@ class HumanCodebreaker < UsefulMethods
     if key_valid?(input)
       input
     else
-      puts 'Try again'
+      error_message
       input_code
     end
   end
