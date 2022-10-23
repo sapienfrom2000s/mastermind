@@ -2,14 +2,14 @@
 
 # require 'pry-byebug'
 
-module UsefulMethods
+class UsefulMethods
   def key_valid?(key)
     pattern = /^[1-6]{4}$/
     pattern.match?(key)
   end
 
   def error_message
-    puts 'Enter valid secret key'
+    puts 'Sorry, that was invalid!'
   end
 
   def winning_message(winner)
@@ -17,7 +17,7 @@ module UsefulMethods
   end
 end
 
-class Choice
+class Choice 
   def codebreaker_or_codemaker
     puts 'Press 1 to be a codebreaker and 2 to be a codemaker!'
     input = gets.chomp
@@ -41,8 +41,7 @@ class Choice
   end
 end
 
-class Codemaker
-  include UsefulMethods
+class Codemaker < UsefulMethods
 
   attr_accessor :secretkey
 
@@ -100,8 +99,8 @@ class Feedback
   end
 end
 
-class HumanCodebreaker
-  include UsefulMethods
+class HumanCodebreaker < UsefulMethods
+  # include UsefulMethods
 
   def input_code
     puts 'Enter your code'
@@ -130,8 +129,8 @@ class HumanCodebreaker
   end
 end
 
-class MachineCodebreaker
-  include UsefulMethods
+class MachineCodebreaker < UsefulMethods
+  # include UsefulMethods
 
   def generate_sample_space
     sample_space = []
