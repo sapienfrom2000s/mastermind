@@ -19,7 +19,6 @@ module UsefulMethods
 end
 
 class Choice
-  attr_accessor :codebreaker, :codemaker
 
   def codebreaker_or_codemaker
     puts 'Press 1 to be a codebreaker and 2 to be a codemaker!'
@@ -27,16 +26,12 @@ class Choice
 
     case input
     when '1'
-      @codebreaker = 'human'
-      @codemaker = 'machine'
       human = HumanCodebreaker.new
       machine = Codemaker.new
       secretkey = machine.generate_secretkey
       human.play(secretkey)
 
     when '2'
-      @codebreaker = 'machine'
-      @codemaker = 'human'
       human = Codemaker.new
       secretkey = human.enter_secretkey
       machine = MachineCodebreaker.new
@@ -74,6 +69,7 @@ class Codemaker
 end
 
 class Feedback
+  attr_accessor :pegs
 
   def hint(secretkey, triedkey)
     secretkey_array = secretkey.split('')
@@ -97,12 +93,12 @@ class Feedback
         pruned_secretkey_array.delete_at(index)
       end
     end
-    display(pegs) unless pegs.join == 'BBBB'
-    pegs
+    # display(pegs) unless pegs.join == 'BBBB'
+    self.pegs = pegs
 
   end
 
-  def display(pegs)
+  def display
     pegs.each{|peg| print peg}
     puts
   end
@@ -132,6 +128,7 @@ class HumanCodebreaker
         winning_message("You")
         break
       end
+      feedback.display
     end
 
     puts "The secret key was #{secretkey}"
@@ -173,7 +170,6 @@ class MachineCodebreaker
         sample_space.reject! do |key|
           algorithm_feedback = Feedback.new
           algorithm_pegs = algorithm_feedback.hint(triedkey, key).join
-          print "#{secretkey} #{triedkey_pegs} #{triedkey} #{algorithm_pegs} #{key}\n"
           triedkey_pegs != algorithm_pegs
         end
       end
