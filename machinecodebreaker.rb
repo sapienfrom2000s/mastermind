@@ -17,8 +17,6 @@ class MachineCodebreaker
   
     def eliminate_space_algorithm(secretkey)
       sample_space = generate_sample_space
-      algorithm_feedback = Feedback.new
-      
       (1..12).each do |index|
         puts "Attempt #{index}"
         triedkey = sample_space.sample
@@ -31,6 +29,7 @@ class MachineCodebreaker
           return true
         else
           sample_space.select! do |key|
+            algorithm_feedback = Feedback.new
             algorithm_pegs = algorithm_feedback.hint(triedkey, key).join
             triedkey_pegs == algorithm_pegs
           end
