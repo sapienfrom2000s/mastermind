@@ -15,7 +15,7 @@ class HumanCodebreaker
     def play(secretkey)
 
       feedback = Feedback.new
-      
+
       (1..12).each do |index|
         puts "Attempt #{index}"
         triedkey = input_code
@@ -28,4 +28,4 @@ class HumanCodebreaker
   
       puts "The secret key was #{secretkey}"
     end
-  end
+end
