@@ -1,5 +1,5 @@
-class MachineCodebreaker < UsefulMethods
-    # include UsefulMethods
+class MachineCodebreaker
+    include UsefulMethods
   
     def generate_sample_space
       sample_space = []

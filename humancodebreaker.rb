@@ -1,5 +1,5 @@
-class HumanCodebreaker < UsefulMethods
-    # include UsefulMethods
+class HumanCodebreaker 
+    include UsefulMethods
   
     def input_code
       puts 'Enter your code'
@@ -13,10 +13,12 @@ class HumanCodebreaker < UsefulMethods
     end
   
     def play(secretkey)
+
+      feedback = Feedback.new
+      
       (1..12).each do |index|
         puts "Attempt #{index}"
         triedkey = input_code
-        feedback = Feedback.new
         if feedback.hint(secretkey, triedkey).join == 'BBBB'
           winning_message('You')
           break

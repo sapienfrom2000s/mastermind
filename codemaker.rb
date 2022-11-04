@@ -1,4 +1,5 @@
-class Codemaker < UsefulMethods
+class Codemaker
+    include UsefulMethods
 
     attr_accessor :secretkey
   

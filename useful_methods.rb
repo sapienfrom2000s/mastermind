@@ -1,4 +1,4 @@
-class UsefulMethods
+module UsefulMethods
     def key_valid?(key)
       pattern = /^[1-6]{4}$/
       pattern.match?(key)
