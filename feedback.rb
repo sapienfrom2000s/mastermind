@@ -1,34 +1,41 @@
 class Feedback
-    attr_accessor :pegs
-  
-    def hint(secretkey, triedkey)
-      secretkey_array = secretkey.split('')
-      triedkey_array = triedkey.split('')
-      pegs = []
-      pruned_secretkey_array = []
-      pruned_triedkey_array = []
-  
-      4.times do |index|
-        if secretkey_array[index] == triedkey_array[index]
-          pegs.push('B')
-        else
-          pruned_secretkey_array.push(secretkey_array[index])
-          pruned_triedkey_array.push(triedkey_array[index])
-        end
-      end
-  
-      pruned_triedkey_array.each do |element|
-        if index = pruned_secretkey_array.find_index(element)
-          pegs.push('W')
-          pruned_secretkey_array.delete_at(index)
-        end
-      end
-      # display(pegs) unless pegs.join == 'BBBB'
-      self.pegs = pegs
-    end
-  
-    def display
-      pegs.each { |peg| print peg }
-      puts
-    end
+  attr_reader :pegs
+  FEEDBACK_STRING_MAX_INDEX = 3
+
+  def hint(secretkey, triedkey)
+    secretkey = secretkey.split('')
+    triedkey = triedkey.split('')
+    @pegs = []
+    @pegs = black_pegs(secretkey, triedkey) +\
+            white_pegs(secretkey, triedkey)
   end
+
+  #'*','?' is used as a trick so that each count is unique
+  def black_pegs(secretkey, triedkey)
+    pegs = []
+    0.upto(FEEDBACK_STRING_MAX_INDEX) do |index|
+      if secretkey[index] == triedkey[index]
+        pegs.push('B')
+        secretkey[index] = '*'
+        triedkey[index] = '?'
+      end
+    end
+    pegs
+  end
+
+  def white_pegs(secretkey, triedkey)
+    pegs = []
+    triedkey.each do |element|
+      if index = secretkey.find_index(element)
+        pegs.push('W')
+        secretkey[index] = '*'
+      end
+    end
+    pegs
+  end
+
+  def display
+    pegs.each { |peg| print peg }
+    puts
+  end
+end
